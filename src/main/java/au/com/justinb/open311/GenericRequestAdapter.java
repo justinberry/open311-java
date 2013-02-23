@@ -2,29 +2,36 @@ package au.com.justinb.open311;
 
 import au.com.justinb.open311.model.ModelObject;
 import au.com.justinb.open311.model.resource.BaseResource;
-import org.restlet.engine.Engine;
-import org.restlet.engine.converter.ConverterHelper;
-import org.restlet.ext.jackson.JacksonConverter;
+import au.com.justinb.open311.util.ReflectionUtils;
+import org.restlet.Request;
+import org.restlet.data.Method;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class GenericRequestAdapter {
+public class GenericRequestAdapter<T extends ModelObject> {
 
-  public GenericRequestAdapter() {
-    List<ConverterHelper> converters = Engine.getInstance().getRegisteredConverters();
-    converters.add(new JacksonConverter());
+  private ClientResource clientResource = new ClientResource("");
+
+  public ArrayList<T> getList(String uri, Class<? extends BaseResource> resourceClazz) {
+    clientResource.setRequest(new Request(Method.GET, uri));
+    return clientResource.wrap(resourceClazz).retrieveList();
   }
 
-  public ArrayList<ModelObject> getList(String requestString, Class<? extends BaseResource> resourceClazz) {
-    ClientResource cr = new ClientResource(requestString);
-    return cr.wrap(resourceClazz).retrieveList();
+  public T get(String uri, Class<? extends BaseResource> resourceClazz) {
+    clientResource.setRequest(new Request(Method.GET, uri));
+    ArrayList<T> list = clientResource.wrap(resourceClazz).retrieveList();
+    return list.size() > 0 ? list.get(0) : null;
   }
 
-  public ModelObject get(String requestString, Class<? extends BaseResource> resourceClazz) {
-    ClientResource cr = new ClientResource(requestString);
-    ArrayList<ModelObject> list = cr.wrap(resourceClazz).retrieveList();
-    return list.get(0);
+  public void create(String baseUri, T modelObject) {
+    String requestUri = ReflectionUtils.constructQueryString(baseUri, modelObject);
+    clientResource.setRequest(new Request(Method.POST, requestUri));
+    try {
+      clientResource.post(modelObject);
+    } catch (ResourceException re) {
+      System.out.println("ResourceException: " + re);
+    }
   }
 }

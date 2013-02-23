@@ -23,9 +23,10 @@ repositories {
 dependencies {
     testCompile "junit:junit:4.11"
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "cglib:cglib-nodep:2.2"
 
     compile "org.restlet.${platform}:org.restlet:2.1.1"  
     compile "org.restlet.${platform}:org.restlet.ext.json:2.1.1"  
     compile "org.restlet.${platform}:org.restlet.ext.jackson:2.1.1"
-//    compile "com.google.code.gson:gson:2.2.2"
+    compile "org.apache.httpcomponents:httpclient:4.2.3"
 }
