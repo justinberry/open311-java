@@ -17,7 +17,7 @@ public class RequestMappings {
     listMappings.put(ServiceRequest.class, "requests.${format}");
   }
 
-  public static String getUrlOfRequest(Class requestType, String id, Format format) {
+  public static String getUrlOfRequest(Class requestType, Format format, String id) {
 
     String path = requestMappings.get(requestType);
 

@@ -21,28 +21,39 @@ public class GenericRequestAdapter<T> {
 
   // There's gotta be a better way of doing this URL mapping stuff..
   private Class modelClass;
+  private Class<? extends BaseResource> resourceClass;
 
-  public GenericRequestAdapter(Class aModelClass) {
-    modelClass = aModelClass;
+  private Format format = Format.JSON;
+
+  public GenericRequestAdapter(Class aModelClass, Class<? extends BaseResource> aResourceClass, Format aFormat) {
+    this(aModelClass, aResourceClass);
+    format = aFormat;
   }
 
-  public List<T> getList(Class<? extends BaseResource> resourceClazz, Format format) {
+  public GenericRequestAdapter(Class aModelClass, Class<? extends BaseResource> aResourceClass) {
+    modelClass = aModelClass;
+    resourceClass = aResourceClass;
+  }
+
+  public List<T> getList() {
     String url = RequestMappings.getListUrlOfRequest(modelClass, format);
     clientResource.setRequest(new Request(Method.GET, url));
 
-    return retrieveResources(resourceClazz);
+    return retrieveResources();
   }
 
   public T get(Class<? extends BaseResource> resourceClazz, String id, Format format) {
-    String path = RequestMappings.getUrlOfRequest(modelClass, id, format);
+    String url = RequestMappings.getUrlOfRequest(modelClass, format, id);
+    clientResource.setRequest(new Request(Method.GET, url));
 
-    List<T> modelObjects = retrieveResources(resourceClazz);
+    List<T> modelObjects = retrieveResources();
     return modelObjects.size() > 0 ? modelObjects.get(0) : null;
   }
 
-  private List<T> retrieveResources(Class<? extends BaseResource> resourceClazz) {
+  @SuppressWarnings("unchecked")
+  private List<T> retrieveResources() {
     List<T> modelObjects = new ArrayList<T>();
-    ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClazz).retrieveList();
+    ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
     ObjectMapper objectMapper = new JacksonConverter().getObjectMapper();
     for (LinkedHashMap hm : objectMaps) {
       modelObjects.add((T)objectMapper.convertValue(hm, modelClass));
