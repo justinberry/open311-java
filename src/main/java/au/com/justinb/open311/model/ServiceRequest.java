@@ -1,12 +1,10 @@
 package au.com.justinb.open311.model;
 
-import au.com.justinb.open311.model.resource.BaseResource;
-import au.com.justinb.open311.model.resource.ServiceRequestResource;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
-public class ServiceRequest implements ModelObject {
+public class ServiceRequest {
 
   @JsonProperty(value = "service_code")
   private String serviceCode;
@@ -73,4 +71,5 @@ public class ServiceRequest implements ModelObject {
 
   public String getServiceName() {
     return serviceName;
-  }}
+  }
+}

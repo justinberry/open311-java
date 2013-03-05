@@ -1,6 +1,4 @@
-package au.com.justinb.open311.model.list;
-
-import au.com.justinb.open311.model.ServiceRequest;
+package au.com.justinb.open311.model;
 
 import java.util.ArrayList;
 
