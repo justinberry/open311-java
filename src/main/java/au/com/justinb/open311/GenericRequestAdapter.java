@@ -37,14 +37,14 @@ public class GenericRequestAdapter<T> {
   }
 
   public List<T> list() {
-    String url = RequestMappings.getListUrlOfRequest(modelClass, format);
+    String url = RequestMappings.getListUrl(modelClass, format);
     clientResource.setRequest(new Request(Method.GET, url));
 
     return retrieveResources();
   }
 
   public T get(String id) {
-    String url = RequestMappings.getUrlOfRequest(modelClass, format, id);
+    String url = RequestMappings.getUrl(modelClass, format, id);
     clientResource.setRequest(new Request(Method.GET, url));
 
     List<T> modelObjects = retrieveResources();
@@ -68,7 +68,7 @@ public class GenericRequestAdapter<T> {
   }
 
   public void create(T modelObject) {
-    String listUrlOfRequest = RequestMappings.getListUrlOfRequest(modelObject.getClass(), format);
+    String listUrlOfRequest = RequestMappings.getListUrl(modelObject.getClass(), format);
     String requestUri = ReflectionUtils.constructQueryString(listUrlOfRequest, modelObject);
 
     clientResource.setRequest(new Request(Method.POST, requestUri));

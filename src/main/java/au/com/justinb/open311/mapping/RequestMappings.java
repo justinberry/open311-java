@@ -26,7 +26,7 @@ public class RequestMappings {
     return resourceMappings.get(modelClass);
   }
 
-  public static String getUrlOfRequest(Class requestType, Format format, String id) {
+  public static String getUrl(Class requestType, Format format, String id) {
 
     String path = requestMappings.get(requestType);
 
@@ -40,7 +40,7 @@ public class RequestMappings {
     return Open311.getBaseUrl() + path;
   }
 
-  public static String getListUrlOfRequest(Class requestType, Format format) {
+  public static String getListUrl(Class requestType, Format format) {
     String path = listRequestMappings.get(requestType);
     path = path.replaceAll("\\$\\{format\\}", format.getType());
 
