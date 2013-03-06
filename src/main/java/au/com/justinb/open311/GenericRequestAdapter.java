@@ -19,30 +19,29 @@ public class GenericRequestAdapter<T> {
 
   private ClientResource clientResource = new ClientResource("");
 
-  // There's gotta be a better way of doing this URL mapping stuff..
   private Class modelClass;
   private Class<? extends BaseResource> resourceClass;
 
   private Format format = Format.JSON;
 
-  public GenericRequestAdapter(Class aModelClass, Class<? extends BaseResource> aResourceClass, Format aFormat) {
-    this(aModelClass, aResourceClass);
+  public GenericRequestAdapter(Class aModelClass, Format aFormat) {
+    this(aModelClass);
     format = aFormat;
   }
 
-  public GenericRequestAdapter(Class aModelClass, Class<? extends BaseResource> aResourceClass) {
+  public GenericRequestAdapter(Class aModelClass) {
     modelClass = aModelClass;
-    resourceClass = aResourceClass;
+    resourceClass = RequestMappings.getResource(modelClass);
   }
 
-  public List<T> getList() {
+  public List<T> list() {
     String url = RequestMappings.getListUrlOfRequest(modelClass, format);
     clientResource.setRequest(new Request(Method.GET, url));
 
     return retrieveResources();
   }
 
-  public T get(Class<? extends BaseResource> resourceClazz, String id, Format format) {
+  public T get(String id) {
     String url = RequestMappings.getUrlOfRequest(modelClass, format, id);
     clientResource.setRequest(new Request(Method.GET, url));
 
@@ -62,7 +61,8 @@ public class GenericRequestAdapter<T> {
   }
 
   public void create(T modelObject) {
-    String requestUri = ReflectionUtils.constructQueryString(Open311.getBaseUrl(), modelObject);
+    String listUrlOfRequest = RequestMappings.getListUrlOfRequest(modelObject.getClass(), format);
+    String requestUri = ReflectionUtils.constructQueryString(listUrlOfRequest, modelObject);
 
     clientResource.setRequest(new Request(Method.POST, requestUri));
     try {
