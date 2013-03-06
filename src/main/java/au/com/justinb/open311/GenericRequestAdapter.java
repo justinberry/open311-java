@@ -5,6 +5,7 @@ import au.com.justinb.open311.model.resource.BaseResource;
 import au.com.justinb.open311.util.Format;
 import au.com.justinb.open311.util.ReflectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.PropertyNamingStrategy;
 import org.restlet.Request;
 import org.restlet.data.Method;
 import org.restlet.ext.jackson.JacksonConverter;
@@ -25,6 +26,11 @@ public class GenericRequestAdapter<T> {
   private Format format = Format.JSON;
 
   private static final ObjectMapper OBJECT_MAPPER = new JacksonConverter().getObjectMapper();
+
+  static {
+    OBJECT_MAPPER.setPropertyNamingStrategy(
+      PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+  }
 
   public GenericRequestAdapter(Class aModelClass, Format aFormat) {
     this(aModelClass);

@@ -6,8 +6,56 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class ServiceRequest {
 
-  @JsonProperty(value = "service_code")
+  @JsonProperty
+  private String jurisdictionId;
+
+  @JsonProperty
+  private String serviceRequestId;
+
+  @JsonProperty
   private String serviceCode;
+
+  @JsonProperty
+  private String startDate;
+
+  @JsonProperty
+  private String endDate;
+
+  @JsonProperty
+  private String status;
+
+  @JsonProperty
+  private String statusNotes;
+
+  @JsonProperty
+  private String serviceName;
+
+  @JsonProperty
+  private String description;
+
+  @JsonProperty
+  private String agencyResponsible;
+
+  @JsonProperty
+  private String serviceNotice;
+
+  @JsonProperty
+  private String requestedDatetime;
+
+  @JsonProperty
+  private String updatedDatetime;
+
+  @JsonProperty
+  private String expectedDatetime;
+
+  @JsonProperty
+  private String address;
+
+  @JsonProperty
+  private String addressId;
+
+  @JsonProperty
+  private String zipcode;
 
   @JsonProperty(value = "lat")
   private String latitude;
@@ -15,30 +63,75 @@ public class ServiceRequest {
   @JsonProperty(value = "long")
   private String longtitude;
 
-  @JsonProperty(value = "description")
-  private String description;
-
-  @JsonProperty(value = "media_url")
+  @JsonProperty
   private String mediaUrl;
 
-  @JsonProperty(value = "service_request_id")
-  private String serviceRequestId;
+  public String getJurisdictionId() {
+    return jurisdictionId;
+  }
 
-  @JsonProperty(value = "status")
-  private String status;
-
-  @JsonProperty(value = "requested_datetime")
-  private String requestedDateTime;
-
-  @JsonProperty(value = "service_name")
-  private String serviceName;
-
-  /*
-   * Getters
-   */
+  public String getServiceRequestId() {
+    return serviceRequestId;
+  }
 
   public String getServiceCode() {
     return serviceCode;
+  }
+
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public String getStatusNotes() {
+    return statusNotes;
+  }
+
+  public String getServiceName() {
+    return serviceName;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String getAgencyResponsible() {
+    return agencyResponsible;
+  }
+
+  public String getServiceNotice() {
+    return serviceNotice;
+  }
+
+  public String getRequestedDatetime() {
+    return requestedDatetime;
+  }
+
+  public String getUpdatedDatetime() {
+    return updatedDatetime;
+  }
+
+  public String getExpectedDatetime() {
+    return expectedDatetime;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public String getAddressId() {
+    return addressId;
+  }
+
+  public String getZipcode() {
+    return zipcode;
   }
 
   public String getLat() {
@@ -49,27 +142,7 @@ public class ServiceRequest {
     return longtitude;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
   public String getMediaUrl() {
     return mediaUrl;
-  }
-
-  public String getServiceRequestId() {
-    return serviceRequestId;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public String getRequestedDateTime() {
-    return requestedDateTime;
-  }
-
-  public String getServiceName() {
-    return serviceName;
   }
 }
