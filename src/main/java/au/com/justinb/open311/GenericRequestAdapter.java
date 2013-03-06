@@ -17,12 +17,14 @@ import java.util.List;
 
 public class GenericRequestAdapter<T> {
 
-  private ClientResource clientResource = new ClientResource("");
+  private final ClientResource clientResource = new ClientResource("");
 
   private Class modelClass;
   private Class<? extends BaseResource> resourceClass;
 
   private Format format = Format.JSON;
+
+  private static final ObjectMapper OBJECT_MAPPER = new JacksonConverter().getObjectMapper();
 
   public GenericRequestAdapter(Class aModelClass, Format aFormat) {
     this(aModelClass);
@@ -51,11 +53,10 @@ public class GenericRequestAdapter<T> {
 
   @SuppressWarnings("unchecked")
   private List<T> retrieveResources() {
-    List<T> modelObjects = new ArrayList<T>();
     ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
-    ObjectMapper objectMapper = new JacksonConverter().getObjectMapper();
+    List<T> modelObjects = new ArrayList<T>();
     for (LinkedHashMap hm : objectMaps) {
-      modelObjects.add((T)objectMapper.convertValue(hm, modelClass));
+      modelObjects.add((T) OBJECT_MAPPER.convertValue(hm, modelClass));
     }
     return modelObjects;
   }
