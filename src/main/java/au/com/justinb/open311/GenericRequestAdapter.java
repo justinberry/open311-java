@@ -53,11 +53,17 @@ public class GenericRequestAdapter<T> {
 
   @SuppressWarnings("unchecked")
   private List<T> retrieveResources() {
-    ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
+
     List<T> modelObjects = new ArrayList<T>();
-    for (LinkedHashMap hm : objectMaps) {
-      modelObjects.add((T) OBJECT_MAPPER.convertValue(hm, modelClass));
+    try {
+      ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
+      for (LinkedHashMap hm : objectMaps) {
+        modelObjects.add((T) OBJECT_MAPPER.convertValue(hm, modelClass));
+      }
+    } catch (ResourceException re) {
+      System.out.println("ResourceException: " + re);
     }
+
     return modelObjects;
   }
 
