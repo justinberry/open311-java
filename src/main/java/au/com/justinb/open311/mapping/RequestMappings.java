@@ -1,11 +1,14 @@
 package au.com.justinb.open311.mapping;
 
 import au.com.justinb.open311.Open311;
+import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import au.com.justinb.open311.model.resource.BaseResource;
 import au.com.justinb.open311.model.resource.ServiceRequestResource;
+import au.com.justinb.open311.model.resource.ServiceResource;
 import au.com.justinb.open311.util.Format;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +23,13 @@ public class RequestMappings {
     requestMappings.put(ServiceRequest.class, "requests/${id}.${format}");
     listRequestMappings.put(ServiceRequest.class, "requests.${format}");
     resourceMappings.put(ServiceRequest.class, ServiceRequestResource.class);
+
+    listRequestMappings.put(ServiceList.class, "services.${format}");
+//    listRequestMappings.put(new ArrayList<ServiceList>().getClass(), "services.${format}");
+
+    requestMappings.put(ServiceList.class, "services/${id}.${format}");
+    listRequestMappings.put(ServiceList.class, "services.${format}");
+    resourceMappings.put(ServiceList.class, ServiceResource.class);
   }
 
   public static Class<? extends BaseResource> getResource(Class modelClass) {
@@ -42,11 +52,12 @@ public class RequestMappings {
 
   public static String getListUrl(Class requestType, Format format) {
     String path = listRequestMappings.get(requestType);
-    path = path.replaceAll("\\$\\{format\\}", format.getType());
 
     if (path == null) {
       throw new RuntimeException("No Open311 mapping found for type " + requestType);
     }
+
+    path = path.replaceAll("\\$\\{format\\}", format.getType());
 
     return Open311.getBaseUrl() + path;
   }

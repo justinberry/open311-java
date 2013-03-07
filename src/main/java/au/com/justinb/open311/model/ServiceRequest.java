@@ -3,7 +3,6 @@ package au.com.justinb.open311.model;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = false)
 public class ServiceRequest {
 
   @JsonProperty
@@ -82,7 +81,7 @@ public class ServiceRequest {
     return startDate;
   }
 
-  public String getEndDate() {
+  public String getEndDate()  {
     return endDate;
   }
 
