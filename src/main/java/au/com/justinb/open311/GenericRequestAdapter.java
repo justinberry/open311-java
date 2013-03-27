@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.PropertyNamingStrategy;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.restlet.Request;
 import org.restlet.data.Method;
+import org.restlet.engine.Engine;
 import org.restlet.ext.jackson.JacksonConverter;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
@@ -29,6 +30,8 @@ public class GenericRequestAdapter<T> {
   private static final ObjectMapper OBJECT_MAPPER = new JacksonConverter().getObjectMapper();
 
   static {
+    Engine.getInstance().getRegisteredConverters().add(new JacksonConverter());
+
     OBJECT_MAPPER.setPropertyNamingStrategy(
       PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
     OBJECT_MAPPER.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -64,7 +67,7 @@ public class GenericRequestAdapter<T> {
 
     List<T> modelObjects = new ArrayList<T>();
     try {
-      ArrayList<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
+      List<LinkedHashMap> objectMaps = clientResource.wrap(resourceClass).retrieveList();
       for (LinkedHashMap hm : objectMaps) {
         modelObjects.add((T) OBJECT_MAPPER.convertValue(hm, modelClass));
       }
