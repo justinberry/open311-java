@@ -1,11 +1,12 @@
 package au.com.justinb.open311;
 
+import au.com.justinb.open311.builder.QueryBuilder;
 import au.com.justinb.open311.mapping.RequestMappings;
 import au.com.justinb.open311.model.resource.BaseResource;
 import au.com.justinb.open311.util.Format;
-import au.com.justinb.open311.util.ReflectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.PropertyNamingStrategy;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.restlet.Request;
 import org.restlet.data.Method;
 import org.restlet.ext.jackson.JacksonConverter;
@@ -30,6 +31,7 @@ public class GenericRequestAdapter<T> {
   static {
     OBJECT_MAPPER.setPropertyNamingStrategy(
       PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+    OBJECT_MAPPER.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
   }
 
   public GenericRequestAdapter(Class aModelClass, Format aFormat) {
@@ -74,10 +76,12 @@ public class GenericRequestAdapter<T> {
   }
 
   public void create(T modelObject) {
-    String listUrlOfRequest = RequestMappings.getListUrl(modelObject.getClass(), format);
-    String requestUri = ReflectionUtils.constructQueryString(listUrlOfRequest, modelObject);
 
-    clientResource.setRequest(new Request(Method.POST, requestUri));
+    String listUrlOfRequest = RequestMappings.getListUrl(modelObject.getClass(), format);
+    String requestString = RequestMappings.getQueryBuilder(modelObject).build();
+    StringBuilder builder = new StringBuilder(listUrlOfRequest).append(requestString);
+
+    clientResource.setRequest(new Request(Method.POST, builder.toString()));
     try {
       clientResource.post(modelObject);
     } catch (ResourceException re) {

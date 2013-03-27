@@ -6,6 +6,8 @@ import org.junit.runner.RunWith
 import org.spockframework.runtime.Sputnik
 import spock.lang.Specification
 
+import java.text.SimpleDateFormat
+
 @RunWith(Sputnik)
 class ServiceRequestTest extends Specification {
 
@@ -13,6 +15,7 @@ class ServiceRequestTest extends Specification {
   def serviceRequest = new ServiceRequest()
 
   def setup() {
+
     serviceRequest.serviceCode = "001"
     serviceRequest.latitude = "37.76524078"
     serviceRequest.longtitude = "-122.4212043"
@@ -38,6 +41,9 @@ class ServiceRequestTest extends Specification {
     requests.get(0).serviceCode == serviceRequest.serviceCode
     requests.get(0).lat == serviceRequest.lat
     requests.get(0).long == serviceRequest.long
+    requests.get(0).requestedDatetime != null
+//    requests.get(0).endDate != null
+//    requests.get(0).startDate != null
   }
 
   def "should retrieve a single service request"() {

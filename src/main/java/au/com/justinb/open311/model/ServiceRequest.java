@@ -1,7 +1,8 @@
 package au.com.justinb.open311.model;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import java.util.Date;
 
 public class ServiceRequest {
 
@@ -15,10 +16,10 @@ public class ServiceRequest {
   private String serviceCode;
 
   @JsonProperty
-  private String startDate;
+  private Date startDate;
 
   @JsonProperty
-  private String endDate;
+  private Date endDate;
 
   @JsonProperty
   private String status;
@@ -39,13 +40,13 @@ public class ServiceRequest {
   private String serviceNotice;
 
   @JsonProperty
-  private String requestedDatetime;
+  private Date requestedDatetime;
 
   @JsonProperty
-  private String updatedDatetime;
+  private Date updatedDatetime;
 
   @JsonProperty
-  private String expectedDatetime;
+  private Date expectedDatetime;
 
   @JsonProperty
   private String address;
@@ -77,11 +78,11 @@ public class ServiceRequest {
     return serviceCode;
   }
 
-  public String getStartDate() {
+  public Date getStartDate() {
     return startDate;
   }
 
-  public String getEndDate()  {
+  public Date getEndDate()  {
     return endDate;
   }
 
@@ -109,15 +110,15 @@ public class ServiceRequest {
     return serviceNotice;
   }
 
-  public String getRequestedDatetime() {
+  public Date getRequestedDatetime() {
     return requestedDatetime;
   }
 
-  public String getUpdatedDatetime() {
+  public Date getUpdatedDatetime() {
     return updatedDatetime;
   }
 
-  public String getExpectedDatetime() {
+  public Date getExpectedDatetime() {
     return expectedDatetime;
   }
 
