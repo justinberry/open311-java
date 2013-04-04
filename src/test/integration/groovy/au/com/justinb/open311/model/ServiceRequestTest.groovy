@@ -17,8 +17,9 @@ class ServiceRequestTest extends Specification {
   def setup() {
 
     serviceRequest.serviceCode = "001"
-    serviceRequest.latitude = "37.76524078"
-    serviceRequest.longtitude = "-122.4212043"
+    serviceRequest.latitude = 37.76524078
+    serviceRequest.longtitude = -122.4212043
+    serviceRequest.description = "This is a long description for testing stuff and things."
 
     Open311.setBaseUrl("http://localhost:4567")
   }
@@ -42,6 +43,7 @@ class ServiceRequestTest extends Specification {
     requests.get(0).lat == serviceRequest.lat
     requests.get(0).long == serviceRequest.long
     requests.get(0).requestedDatetime != null
+    requests.get(0).description != null
 //    requests.get(0).endDate != null
 //    requests.get(0).startDate != null
   }

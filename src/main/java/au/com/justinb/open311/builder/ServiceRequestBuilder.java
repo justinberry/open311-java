@@ -50,7 +50,7 @@ public class ServiceRequestBuilder implements QueryBuilder {
     append(stringBuilder, LONG, serviceRequest.getLong());
   }
 
-  private void append(StringBuilder builder, String key, String value) {
+  private void append(StringBuilder builder, String key, Object value) {
     if (value == null) {
       return;
     }

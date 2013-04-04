@@ -58,10 +58,10 @@ public class ServiceRequest {
   private String zipcode;
 
   @JsonProperty(value = "lat")
-  private String latitude;
+  private Double latitude;
 
   @JsonProperty(value = "long")
-  private String longtitude;
+  private Double longtitude;
 
   @JsonProperty
   private String mediaUrl;
@@ -134,11 +134,11 @@ public class ServiceRequest {
     return zipcode;
   }
 
-  public String getLat() {
+  public Double getLat() {
     return latitude;
   }
 
-  public String getLong() {
+  public Double getLong() {
     return longtitude;
   }
 
