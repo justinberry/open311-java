@@ -37,11 +37,6 @@ public class GenericRequestAdapter<T> {
     OBJECT_MAPPER.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
   }
 
-  public GenericRequestAdapter(Class aModelClass, Format aFormat) {
-    this(aModelClass);
-    format = aFormat;
-  }
-
   public GenericRequestAdapter(Class aModelClass) {
     modelClass = aModelClass;
     resourceClass = RequestMappings.getResource(modelClass);

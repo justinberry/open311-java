@@ -2,7 +2,7 @@ package au.com.justinb.open311.builder;
 
 import au.com.justinb.open311.model.ServiceRequest;
 
-public class ServiceRequestBuilder implements QueryBuilder {
+public class ServiceRequestQueryBuilder implements QueryBuilder {
 
   public static final String QUESTION_MARK = "?";
   public static final String EQUALS = "=";
@@ -14,10 +14,16 @@ public class ServiceRequestBuilder implements QueryBuilder {
   public static final String ADDRESS_STRING = "address_string";
   public static final String DESCRIPTION = "description";
   public static final String MEDIA_URL = "media_url";
+  public static final String EMAIL = "email";
+  public static final String DEVICE_ID = "device_id";
+  public static final String ACCOUNT_ID = "account_id";
+  public static final String FIRST_NAME = "first_name";
+  public static final String LAST_NAME = "last_name";
+  public static final String PHONE = "phone";
 
   private final ServiceRequest serviceRequest;
 
-  public ServiceRequestBuilder(ServiceRequest serviceRequest) {
+  public ServiceRequestQueryBuilder(ServiceRequest serviceRequest) {
     this.serviceRequest = serviceRequest;
   }
 
@@ -35,12 +41,12 @@ public class ServiceRequestBuilder implements QueryBuilder {
     append(stringBuilder, ADDRESS_STRING, serviceRequest.getAddress());
     append(stringBuilder, DESCRIPTION, serviceRequest.getDescription());
     append(stringBuilder, MEDIA_URL, serviceRequest.getMediaUrl());
-//    append(stringBuilder, "email", TODO);
-//    append(stringBuilder, "device_id", TODO);
-//    append(stringBuilder, "account_id", TODO);
-//    append(stringBuilder, "first_name", TODO);
-//    append(stringBuilder, "last_name", TODO);
-//    append(stringBuilder, "phone", TODO);
+    append(stringBuilder, EMAIL, serviceRequest.getEmail());
+    append(stringBuilder, DEVICE_ID, serviceRequest.getDeviceId());
+    append(stringBuilder, ACCOUNT_ID, serviceRequest.getAccountId());
+    append(stringBuilder, FIRST_NAME, serviceRequest.getFirstName());
+    append(stringBuilder, LAST_NAME, serviceRequest.getLastName());
+    append(stringBuilder, PHONE, serviceRequest.getPhone());
   }
 
   private void appendRequiredAttributes(StringBuilder stringBuilder) {
