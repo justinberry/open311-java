@@ -83,6 +83,9 @@ public class ServiceRequest implements Serializable {
 
   private String phone;
 
+  // Required by Jackson
+  public ServiceRequest() { }
+
   public ServiceRequest(Builder builder) {
     this.jurisdictionId = builder.jurisdictionId;
     this.serviceRequestId = builder.serviceRequestId;
@@ -216,7 +219,7 @@ public class ServiceRequest implements Serializable {
     return phone;
   }
 
-  public static class Builder {
+  public static class Builder implements Serializable {
 
     private String jurisdictionId;
     private String serviceRequestId;

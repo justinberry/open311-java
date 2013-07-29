@@ -27,12 +27,4 @@ public class RequestMapping {
   public Class getResourceClass() {
     return resourceClass;
   }
-
-  public QueryBuilder getQueryBuilder(Object modelObject) {
-    if (modelObject.getClass() == ServiceRequest.class) {
-      return new ServiceRequestQueryBuilder((ServiceRequest) modelObject);
-    } else {
-      throw new RuntimeException("No mapping found for " + modelObject);
-    }
-  }
 }

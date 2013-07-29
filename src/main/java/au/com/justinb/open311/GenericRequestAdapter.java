@@ -1,7 +1,10 @@
 package au.com.justinb.open311;
 
 import au.com.justinb.open311.builder.QueryBuilder;
+import au.com.justinb.open311.builder.SimpleQueryBuilder;
+import au.com.justinb.open311.factory.QueryBuilderFactory;
 import au.com.justinb.open311.mapping.RequestMappings;
+import au.com.justinb.open311.model.ServiceRequest;
 import au.com.justinb.open311.model.resource.BaseResource;
 import au.com.justinb.open311.util.Format;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -11,16 +14,17 @@ import org.restlet.Request;
 import org.restlet.data.Method;
 import org.restlet.engine.Engine;
 import org.restlet.ext.jackson.JacksonConverter;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class GenericRequestAdapter<T> {
 
-  private final ClientResource clientResource = new ClientResource("");
+  private final ClientResource clientResource;
+
+  private final QueryBuilderFactory queryBuilderFactory;
 
   private Class modelClass;
   private Class<? extends BaseResource> resourceClass;
@@ -40,16 +44,28 @@ public class GenericRequestAdapter<T> {
   public GenericRequestAdapter(Class aModelClass) {
     modelClass = aModelClass;
     resourceClass = RequestMappings.getResource(modelClass);
+    queryBuilderFactory = new QueryBuilderFactory();
+    clientResource = new ClientResource("");
+    clientResource.setChallengeResponse(Open311.getAuthetication());
   }
 
-  public List<T> list() {
+  public List<T> list(Map<String, String> extraProperties) throws Open311Exception {
     String url = RequestMappings.getListUrl(modelClass, format);
-    clientResource.setRequest(new Request(Method.GET, url));
+
+    QueryBuilder simpleQueryBuilder = queryBuilderFactory
+      .newSimpleQueryBuilder()
+      .withExtraProperties(extraProperties);
+
+    clientResource.setRequest(new Request(Method.GET, url + simpleQueryBuilder.build()));
 
     return retrieveResources();
   }
 
-  public T get(String id) {
+  public List<T> list() throws Open311Exception {
+    return list(new HashMap<String, String>());
+  }
+
+  public T get(String id) throws Open311Exception {
     String url = RequestMappings.getUrl(modelClass, format, id);
     clientResource.setRequest(new Request(Method.GET, url));
 
@@ -58,7 +74,7 @@ public class GenericRequestAdapter<T> {
   }
 
   @SuppressWarnings("unchecked")
-  private List<T> retrieveResources() {
+  private List<T> retrieveResources() throws Open311Exception {
 
     List<T> modelObjects = new ArrayList<T>();
     try {
@@ -67,23 +83,23 @@ public class GenericRequestAdapter<T> {
         modelObjects.add((T) OBJECT_MAPPER.convertValue(hm, modelClass));
       }
     } catch (ResourceException re) {
-      System.out.println("ResourceException: " + re);
+      throw new Open311Exception(re);
     }
 
     return modelObjects;
   }
 
-  public void create(T modelObject) {
+  public void create(T modelObject) throws Open311Exception {
 
     String listUrlOfRequest = RequestMappings.getListUrl(modelObject.getClass(), format);
-    String requestString = RequestMappings.getQueryBuilder(modelObject).build();
+    String requestString = queryBuilderFactory.newQueryBuilder(modelObject).build();
     StringBuilder builder = new StringBuilder(listUrlOfRequest).append(requestString);
 
     clientResource.setRequest(new Request(Method.POST, builder.toString()));
     try {
-      clientResource.post(modelObject);
+      clientResource.post(new EmptyRepresentation());
     } catch (ResourceException re) {
-      System.out.println("ResourceException: " + re);
+      throw new Open311Exception(re);
     }
   }
 }

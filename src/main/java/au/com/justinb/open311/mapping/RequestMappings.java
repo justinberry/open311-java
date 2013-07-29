@@ -2,6 +2,7 @@ package au.com.justinb.open311.mapping;
 
 import au.com.justinb.open311.Open311;
 import au.com.justinb.open311.builder.QueryBuilder;
+import au.com.justinb.open311.factory.QueryBuilderFactory;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import au.com.justinb.open311.model.resource.BaseResource;
@@ -57,9 +58,5 @@ public class RequestMappings {
     path = path.replaceAll("\\$\\{format\\}", format.getType());
 
     return Open311.getBaseUrl() + path;
-  }
-
-  public static QueryBuilder getQueryBuilder(Object modelObject) {
-    return requestMappings.get(modelObject.getClass()).getQueryBuilder(modelObject);
   }
 }

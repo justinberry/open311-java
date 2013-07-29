@@ -2,11 +2,7 @@ package au.com.justinb.open311.builder;
 
 import au.com.justinb.open311.model.ServiceRequest;
 
-public class ServiceRequestQueryBuilder implements QueryBuilder {
-
-  public static final String QUESTION_MARK = "?";
-  public static final String EQUALS = "=";
-  public static final String AMPERSAND = "&";
+public class ServiceRequestQueryBuilder extends AbstractQueryBuilder {
 
   public static final String SERVICE_CODE = "service_code";
   public static final String LAT = "lat";
@@ -24,17 +20,19 @@ public class ServiceRequestQueryBuilder implements QueryBuilder {
   private final ServiceRequest serviceRequest;
 
   public ServiceRequestQueryBuilder(ServiceRequest serviceRequest) {
+    super();
     this.serviceRequest = serviceRequest;
   }
 
   @Override
   public String build() {
 
-    StringBuilder stringBuilder = new StringBuilder(QUESTION_MARK);
-    appendRequiredAttributes(stringBuilder);
-    appendOptionalAttributes(stringBuilder);
+    if (serviceRequest != null) {
+      appendRequiredAttributes(stringBuilder);
+      appendOptionalAttributes(stringBuilder);
+    }
 
-    return stringBuilder.toString();
+    return super.build();
   }
 
   private void appendOptionalAttributes(StringBuilder stringBuilder) {
@@ -54,13 +52,5 @@ public class ServiceRequestQueryBuilder implements QueryBuilder {
     append(stringBuilder, SERVICE_CODE, serviceRequest.getServiceCode());
     append(stringBuilder, LAT, serviceRequest.getLat());
     append(stringBuilder, LONG, serviceRequest.getLong());
-  }
-
-  private void append(StringBuilder builder, String key, Object value) {
-    if (value == null) {
-      return;
-    }
-
-    builder.append(AMPERSAND).append(key).append(EQUALS).append(value);
   }
 }
