@@ -219,6 +219,11 @@ public class ServiceRequest implements Serializable {
     return phone;
   }
 
+  public void updateStatus(String status, String statusNotes) {
+    this.status = status;
+    this.statusNotes = statusNotes;
+  }
+
   public static class Builder implements Serializable {
 
     private String jurisdictionId;
