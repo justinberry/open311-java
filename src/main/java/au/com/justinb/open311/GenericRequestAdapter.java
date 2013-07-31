@@ -56,7 +56,7 @@ public class GenericRequestAdapter<T> {
       .newSimpleQueryBuilder()
       .withExtraProperties(extraProperties);
 
-    clientResource.setRequest(new Request(Method.GET, url + simpleQueryBuilder.build()));
+    clientResource.setRequest(authenticateRequest(new Request(Method.GET, url + simpleQueryBuilder.build())));
 
     return retrieveResources();
   }
@@ -67,7 +67,7 @@ public class GenericRequestAdapter<T> {
 
   public T get(String id) throws Open311Exception {
     String url = RequestMappings.getUrl(modelClass, format, id);
-    clientResource.setRequest(new Request(Method.GET, url));
+    clientResource.setRequest(authenticateRequest(new Request(Method.GET, url)));
 
     List<T> modelObjects = retrieveResources();
     return modelObjects.size() > 0 ? modelObjects.get(0) : null;
@@ -95,11 +95,16 @@ public class GenericRequestAdapter<T> {
     String requestString = queryBuilderFactory.newQueryBuilder(modelObject).build();
     StringBuilder builder = new StringBuilder(listUrlOfRequest).append(requestString);
 
-    clientResource.setRequest(new Request(Method.POST, builder.toString()));
+    clientResource.setRequest(authenticateRequest(new Request(Method.POST, builder.toString())));
     try {
       clientResource.post(new EmptyRepresentation());
     } catch (ResourceException re) {
       throw new Open311Exception(re);
     }
+  }
+
+  private Request authenticateRequest(Request request) {
+    request.setChallengeResponse(Open311.getAuthetication());
+    return request;
   }
 }

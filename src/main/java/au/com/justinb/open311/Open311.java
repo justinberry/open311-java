@@ -14,8 +14,7 @@ public class Open311 {
   }
 
   public static void setBasicAuth(String username, String password) {
-    ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
-    challengeResponse = new ChallengeResponse(scheme,
+    challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC,
       username, password);
   }
 
