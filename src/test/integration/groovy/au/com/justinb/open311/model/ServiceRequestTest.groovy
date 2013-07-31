@@ -16,10 +16,12 @@ class ServiceRequestTest extends Specification {
 
   def setup() {
 
+    Open311.setBasicAuth("android", "yyy");
     serviceRequest.serviceCode = "001"
     serviceRequest.latitude = 37.76524078
     serviceRequest.longtitude = -122.4212043
     serviceRequest.description = "This is a long description for testing stuff and things."
+    serviceRequest.status = "open"
 
     Open311.setBaseUrl("http://localhost:4567")
   }
@@ -54,5 +56,17 @@ class ServiceRequestTest extends Specification {
     def request = requestAdapter.get(requests.get(0).serviceRequestId)
     then:
     request != null
+  }
+
+  def "should set service request status to closed"() {
+    when:
+    def requests = requestAdapter.list()
+    serviceRequest.status = "closed"
+    requestAdapter.update(requests.get(0).serviceRequestId, serviceRequest)
+    def retrievedRequest = requestAdapter.get(requests.get(0).serviceRequestId)
+
+    then:
+    retrievedRequest != null
+    retrievedRequest.status == "closed"
   }
 }

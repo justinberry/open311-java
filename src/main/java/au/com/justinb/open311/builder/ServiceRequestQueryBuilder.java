@@ -16,6 +16,7 @@ public class ServiceRequestQueryBuilder extends AbstractQueryBuilder {
   public static final String FIRST_NAME = "first_name";
   public static final String LAST_NAME = "last_name";
   public static final String PHONE = "phone";
+  public static final String STATUS = "status";
 
   private final ServiceRequest serviceRequest;
 
@@ -45,6 +46,7 @@ public class ServiceRequestQueryBuilder extends AbstractQueryBuilder {
     append(stringBuilder, FIRST_NAME, serviceRequest.getFirstName());
     append(stringBuilder, LAST_NAME, serviceRequest.getLastName());
     append(stringBuilder, PHONE, serviceRequest.getPhone());
+    append(stringBuilder, STATUS, serviceRequest.getStatus());
   }
 
   private void appendRequiredAttributes(StringBuilder stringBuilder) {

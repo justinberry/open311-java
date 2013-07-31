@@ -103,6 +103,19 @@ public class GenericRequestAdapter<T> {
     }
   }
 
+  public void update(String id, T modelObject) throws Open311Exception {
+    String url = RequestMappings.getUrl(modelClass, format, id);
+    String requestString = queryBuilderFactory.newQueryBuilder(modelObject).build();
+    StringBuilder builder = new StringBuilder(url).append(requestString);
+    clientResource.setRequest(authenticateRequest(new Request(Method.PUT, builder.toString())));
+
+    try {
+      clientResource.put(new EmptyRepresentation());
+    } catch (ResourceException re) {
+      throw new Open311Exception(re);
+    }
+  }
+
   private Request authenticateRequest(Request request) {
     request.setChallengeResponse(Open311.getAuthetication());
     return request;
